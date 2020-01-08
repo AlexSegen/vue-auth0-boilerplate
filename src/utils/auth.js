@@ -9,37 +9,45 @@ const webAuth = new auth0.WebAuth({
   scope: "openid profile"
 });
 
-let tokens = {};
-let userProfile = {};
-
 const login = () => {
   webAuth.authorize();
 };
 
 const logout = () => {
-    tokens = {};
-}
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("id_token");
+  localStorage.removeItem("expires_at");
+  localStorage.removeItem("user_profile");
+};
 
 const handleAuth = cb => {
-    webAuth.parseHash((err, authResult) => {
-        if(authResult && authResult.accessToken) {
-            tokens.accessToken = authResult.accessToken;
-            tokens.idToken = authResult.idToken;
-            tokens.expiry = (new Date()).getTime() + authResult.expiresIn * 1000;
-            userProfile = authResult.idTokenPayload;
-            cb();
-        } else {
-            console.log('Error: ', error);
-        }
-    });
+  webAuth.parseHash((err, authResult) => {
+    if (authResult && authResult.accessToken) {
+      localStorage.setItem("access_token", authResult.accessToken);
+      localStorage.setItem("id_token", authResult.idToken);
+      localStorage.setItem(
+        "expires_at",
+        new Date().getTime() + authResult.expiresIn * 1000
+      );
+      localStorage.setItem(
+        "user_profile",
+        JSON.stringify(authResult.idTokenPayload)
+      );
+      cb();
+    } else {
+      console.log("Error: ", err);
+    }
+  });
 };
 
 const isLoggedIn = () => {
-    return tokens.accessToken && (new Date()).getTime() < tokens.expiry;
+  const access_token = localStorage.getItem("access_token");
+  const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
+  return access_token && new Date().getTime() < expiresAt;
 };
 
 const getProfile = () => {
-    return userProfile
-}
+  return JSON.parse(localStorage.getItem("user_profile"));
+};
 
 export { login, getProfile, logout, handleAuth, isLoggedIn };
