@@ -1,12 +1,12 @@
 import auth0 from "auth0-js";
 
 const webAuth = new auth0.WebAuth({
-  domain: "vue-oauth.auth0.com",
-  clientID: "C5kyY6v6R5533zsASYoVnUDkGvS3wOpv",
-  redirectUri: "http://localhost:8080/callback",
-  audience: "",
-  responseType: "token id_token",
-  scope: "openid profile"
+  domain: process.env.VUE_APP_AUTH_DOMAIN,
+  clientID: process.env.VUE_APP_AUTH_CLIENT_ID,
+  redirectUri: process.env.VUE_APP_AUTH_REDIRECT_URI,
+  audience: process.env.VUE_APP_AUTH_AUDIENCE,
+  responseType: process.env.VUE_APP_AUTH_RESPONSE_TYPE,
+  scope: process.env.VUE_APP_AUTH_SCOPE
 });
 
 const login = () => {
