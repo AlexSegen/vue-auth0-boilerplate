@@ -1,5 +1,12 @@
 import auth0 from "auth0-js";
 
+const STORAGE = {
+  ACCESS_TOKEN: "vauth_access_token",
+  ID_TOKEN: "vauth_id_token",
+  PROFILE: "vauth_user_profile",
+  EXPIRES_AT: "vauth_expiration"
+}
+
 const webAuth = new auth0.WebAuth({
   domain: process.env.VUE_APP_AUTH_DOMAIN,
   clientID: process.env.VUE_APP_AUTH_CLIENT_ID,
@@ -14,23 +21,23 @@ const login = () => {
 };
 
 const logout = () => {
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("id_token");
-  localStorage.removeItem("expires_at");
-  localStorage.removeItem("user_profile");
+  localStorage.removeItem(STORAGE.ACCESS_TOKEN);
+  localStorage.removeItem(STORAGE.ID_TOKEN);
+  localStorage.removeItem(STORAGE.EXPIRES_AT);
+  localStorage.removeItem(STORAGE.PROFILE);
 };
 
 const handleAuth = cb => {
   webAuth.parseHash((err, authResult) => {
     if (authResult && authResult.accessToken) {
-      localStorage.setItem("access_token", authResult.accessToken);
-      localStorage.setItem("id_token", authResult.idToken);
+      localStorage.setItem(STORAGE.ACCESS_TOKEN, authResult.accessToken);
+      localStorage.setItem(STORAGE.ID_TOKEN, authResult.idToken);
       localStorage.setItem(
-        "expires_at",
+        STORAGE.EXPIRES_AT,
         new Date().getTime() + authResult.expiresIn * 1000
       );
       localStorage.setItem(
-        "user_profile",
+        STORAGE.PROFILE,
         JSON.stringify(authResult.idTokenPayload)
       );
       cb();
@@ -41,13 +48,18 @@ const handleAuth = cb => {
 };
 
 const isLoggedIn = () => {
-  const access_token = localStorage.getItem("access_token");
-  const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
+  const access_token = localStorage.getItem(STORAGE.ACCESS_TOKEN);
+  const expiresAt = JSON.parse(localStorage.getItem(STORAGE.EXPIRES_AT));
   return access_token && new Date().getTime() < expiresAt;
 };
 
 const getProfile = () => {
-  return JSON.parse(localStorage.getItem("user_profile"));
+  return JSON.parse(localStorage.getItem(STORAGE.PROFILE));
 };
 
-export { login, getProfile, logout, handleAuth, isLoggedIn };
+const getToken  = () => {
+  const access_token = localStorage.getItem(STORAGE.ACCESS_TOKEN);
+  return  access_token ? access_token : null
+}
+
+export { login, getProfile, getToken, logout, handleAuth, isLoggedIn };
