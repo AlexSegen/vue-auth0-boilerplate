@@ -1,10 +1,18 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/secret">Secret</router-link>
+  <div>
+    <Navbar/>
+    <div class="container">
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
+<script>
+import Navbar from '@/components/shared/Navbar'
+export default {
+  name: "App",
+  components: {
+    Navbar
+  }
+  
+}
+</script>
