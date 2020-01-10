@@ -6,7 +6,7 @@
         <li>Nickname: {{user.nickname}} </li>
         <li>Updated: {{user.updated_at}} </li>
     </ul>
-    <button type="button" @click="logout()">Logout</button>
+    <button class="btn btn-outline-secondary"  type="button" @click="logout()">Logout</button>
 </div>
 </template>
 <script>

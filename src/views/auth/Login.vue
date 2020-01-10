@@ -2,12 +2,12 @@
   <div class="hello">
     <div v-if="!IS_LOGGED_IN">
       <h2>Hello</h2>
-      <p>Please, Sign In.</p>
+      <button type="button" @click="login">Login</button>
     </div>
     <div v-else>
-      <h2>Welcome, <br>  <small>{{user.name}}</small></h2>
+      <h2>Welcome, {{user.name}}</h2>
       <p>You are Logged In</p>
-      <button class="btn btn-outline-secondary" type="button" @click="logout">Logout</button>
+      <button type="button" @click="logout">Logout</button>
     </div>
   </div>
 </template>
@@ -15,9 +15,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { getProfile } from "@/utils/auth";
+import { login, getProfile,  logout, isLoggedIn } from "@/utils/auth";
 export default {
-  name: "HelloWorld",
+  name: "Login",
   data() {
     return {
       user: getProfile()
@@ -31,14 +31,15 @@ export default {
   methods: {
     ...mapActions([
       'logout',
-    ])
+    ]),
+    login() {
+      login();
+    }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.hello {
-  text-align: center;
-}
+
 </style>

@@ -5,7 +5,7 @@ const STORAGE = {
   ID_TOKEN: "vauth_id_token",
   PROFILE: "vauth_user_profile",
   EXPIRES_AT: "vauth_expiration"
-}
+};
 
 const webAuth = new auth0.WebAuth({
   domain: process.env.VUE_APP_AUTH_DOMAIN,
@@ -21,10 +21,16 @@ const login = () => {
 };
 
 const logout = () => {
-  localStorage.removeItem(STORAGE.ACCESS_TOKEN);
-  localStorage.removeItem(STORAGE.ID_TOKEN);
-  localStorage.removeItem(STORAGE.EXPIRES_AT);
-  localStorage.removeItem(STORAGE.PROFILE);
+  return new Promise((resolve, reject) => {
+      localStorage.removeItem(STORAGE.ACCESS_TOKEN);
+      localStorage.removeItem(STORAGE.ID_TOKEN);
+      localStorage.removeItem(STORAGE.EXPIRES_AT);
+      localStorage.removeItem(STORAGE.PROFILE);
+
+      if(!localStorage.getItem(STORAGE.ACCESS_TOKEN)) resolve(true);
+      
+      reject("Error ocurred while logging out");
+  });
 };
 
 const handleAuth = cb => {
@@ -57,9 +63,9 @@ const getProfile = () => {
   return JSON.parse(localStorage.getItem(STORAGE.PROFILE));
 };
 
-const getToken  = () => {
+const getToken = () => {
   const access_token = localStorage.getItem(STORAGE.ACCESS_TOKEN);
-  return  access_token ? access_token : null
-}
+  return access_token ? access_token : null;
+};
 
 export { login, getProfile, getToken, logout, handleAuth, isLoggedIn };

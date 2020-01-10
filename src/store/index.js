@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-import router from '@/router'
+import router from "@/router";
 
-import { login, handleAuth, logout, isLoggedIn  } from '@/utils/auth';
+import { login, handleAuth, logout, isLoggedIn } from "@/utils/auth";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -57,21 +57,21 @@ export default new Vuex.Store({
   actions: {
     checkIfsLoggedIn(context) {
       try {
-        context.commit('handleAuth', isLoggedIn());
+        context.commit("handleAuth", isLoggedIn());
       } catch (error) {
-        console.log('Store: Error in [ACTION] => isLoggedIn', error.message);
+        console.log("Store: Error in [ACTION] => isLoggedIn", error.message);
       }
     },
     logout(context) {
-      try {
-        logout()
-        context.commit('handleAuth', isLoggedIn());
-        router.push("/");
-      } catch (error) {
-        console.log('Store: Error in [ACTION] => logout', error.message);
-      }
+      logout()
+        .then(() => {
+          context.commit("handleAuth", isLoggedIn());
+          router.push("/login");
+        })
+        .catch(error => {
+          console.log("Store: Error in [ACTION] => logout", error.message);
+        });
     }
   },
-  modules: {
-  }
-})
+  modules: {}
+});

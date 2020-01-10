@@ -29,6 +29,9 @@
               <a class="nav-link" href="javascript:void(0);" tabindex="-1" @click="logout">Logout</a>
             </li>
           </template>
+          <li class="nav-item" v-else>
+            <a class="nav-link" href="javascript:void(0);" @click="login">Login</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -36,11 +39,13 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { login, getProfile } from "@/utils/auth";
 
 export default {
   name: "Navbar",
   data() {
     return {
+      user: getProfile()
     };
   },
   computed: {
@@ -52,6 +57,9 @@ export default {
     ...mapActions([
       'logout',
     ]),
+    login() {
+      login();
+    }
   }
 };
 </script>
