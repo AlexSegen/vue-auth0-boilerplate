@@ -11,7 +11,9 @@
 </template>
 <script>
 
+import { mapActions } from 'vuex'
 import { getProfile,  logout, isLoggedIn } from "@/utils/auth";
+
 export default {
     name:"Secret",
     data() {
@@ -19,7 +21,13 @@ export default {
             user: getProfile()
         }
     },
+    beforeMount() {
+        this.checkIfsLoggedIn()
+    },
     methods: {
+        ...mapActions([
+            'checkIfsLoggedIn',
+        ]),
         logout() {
             logout();
             this.$router.push("/");

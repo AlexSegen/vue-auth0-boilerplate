@@ -21,23 +21,37 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/about">About</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/secret">Secret</router-link>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0);" tabindex="-1">Logout</a>
-          </li>
+          <template v-if="IS_LOGGED_IN">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/secret">Secret</router-link>
+            </li>
+            <li class="nav-item" >
+              <a class="nav-link" href="javascript:void(0);" tabindex="-1" @click="logout">Logout</a>
+            </li>
+          </template>
         </ul>
       </div>
     </nav>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: "Navbar",
   data() {
     return {
     };
+  },
+  computed: {
+    ...mapGetters([
+      'IS_LOGGED_IN'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'logout',
+    ]),
   }
 };
 </script>

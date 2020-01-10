@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <div v-if="!isLoggedIn">
+    <div v-if="!IS_LOGGED_IN">
       <h2>Hello</h2>
       <button type="button" @click="login">Login</button>
     </div>
@@ -13,17 +13,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import { login, getProfile,  logout, isLoggedIn } from "../utils/auth";
 export default {
   name: "HelloWorld",
   data() {
     return {
-      isLoggedIn: isLoggedIn(),
       user: getProfile()
     };
   },
-  props: {
-    msg: String
+  computed: {
+    ...mapGetters([
+      'IS_LOGGED_IN'
+    ])
   },
   methods: {
     login() {
@@ -31,7 +34,6 @@ export default {
     },
     logout(){
       logout()
-      this.isLoggedIn = false;
       this.user = null
     }
   }
